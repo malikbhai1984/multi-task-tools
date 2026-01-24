@@ -1,0 +1,23 @@
+/* style.css - Optional separate file */
+* {margin:0;padding:0;box-sizing:border-box;}
+body {font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;color:#333;}
+header {background:rgba(255,255,255,0.95);padding:25px 20px;text-align:center;box-shadow:0 2px 15px rgba(0,0,0,0.1);}
+header h1 {color:#667eea;font-size:2.5em;margin-bottom:8px;}
+.nav-tabs {display:flex;justify-content:center;gap:12px;padding:20px;flex-wrap:wrap;}
+.nav-btn {padding:12px 25px;background:rgba(255,255,255,0.2);border:none;color:white;font-size:15px;font-weight:600;border-radius:25px;cursor:pointer;transition:all 0.3s ease;}
+.nav-btn:hover {background:rgba(255,255,255,0.3);transform:translateY(-3px);}
+.nav-btn.active {background:white;color:#667eea;}
+.container {max-width:1400px;margin:0 auto;padding:25px;}
+.category {display:none;}
+.category.active {display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:25px;}
+.tool-card {background:white;padding:28px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.12);transition:all 0.3s ease;}
+.tool-card:hover {transform:translateY(-8px);box-shadow:0 12px 40px rgba(102,126,234,0.25);}
+.tool-card h3 {color:#667eea;margin-bottom:18px;font-size:1.35em;}
+input,textarea,select {width:100%;padding:11px 14px;margin:8px 0;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;}
+input:focus,textarea:focus,select:focus {outline:none;border-color:#667eea;}
+button {background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;padding:11px 22px;margin:6px 6px 6px 0;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;}
+button:hover {transform:translateY(-2px);}
+.result {margin-top:18px;padding:18px;background:#f8f9fa;border-radius:10px;border-left:4px solid #667eea;}
+.qr-display {margin-top:18px;padding:20px;background:#f8f9fa;border-radius:10px;text-align:center;}
+label {display:inline-block;margin:8px 12px 8px 0;}
+@media (max-width:768px) {.category.active{grid-template-columns:1fr;}}
