@@ -22,6 +22,23 @@
         th { background: #0f3460; color: #00ce79; }
         .sub-item { padding-left: 30px; background: #0f1e2e; }
         .preview-img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+        
+        /* Drag & Drop Styles */
+        .tool-row {
+            cursor: move;
+            transition: background 0.3s;
+        }
+        .tool-row:hover {
+            background: #1e2642 !important;
+        }
+        .tool-row.dragging {
+            opacity: 0.5;
+            background: #00ce79 !important;
+        }
+        .tool-row.drag-over {
+            border-top: 3px solid #00ce79;
+        }
+        
         @media (max-width: 768px) { input, select { width: calc(100% - 10px); } }
     </style>
 </head>
@@ -56,9 +73,10 @@
         <table id="subTable"></table>
     </div>
 
-    <!-- Tools with Image Upload -->
+    <!-- Tools with Image Upload + Drag & Drop -->
     <div class="box">
-        <h3>3️⃣ Tool Categories (With Image Upload)</h3>
+        <h3>3️⃣ Tool Categories (Drag & Drop to Reorder)</h3>
+        <p style="color:#bbb; margin-bottom:10px; font-size:13px;">💡 Drag tools to reorder. Changes will reflect on homepage.</p>
         <input type="text" id="tName" placeholder="Tool Name">
         <input type="text" id="tIcon" placeholder="Icon" value="🔧">
         <input type="text" id="tLink" placeholder="Link">
@@ -70,7 +88,7 @@
         <div id="imagePreview" style="margin:10px 0;"></div>
         <button onclick="addTool()" id="toolBtn">➕ Add Tool</button>
         <button onclick="cancelToolEdit()" id="cancelToolBtn" style="display:none; background:#6c757d;">❌ Cancel</button>
-        <table id="toolTable"></table>
+        <div id="toolTableContainer"></div>
     </div>
 
     <!-- Cards Per Row -->
@@ -164,7 +182,7 @@
             });
             document.getElementById('subTable').innerHTML = subHTML;
 
-            // Tool Table
+            // Tool Table with Drag & Drop
             const tools = JSON.parse(localStorage.getItem('toolItems')) || [];
             const parentToolSelect = document.getElementById('parentTool');
             const mainTools = tools.filter(t => !t.parent || t.parent === '');
@@ -174,11 +192,12 @@
                     return `<option value="${actualIndex}">${t.name}</option>`;
                 }).join('');
 
-            let toolHTML = '<tr><th>Image</th><th>Icon</th><th>Name</th><th>Link</th><th>Actions</th></tr>';
+            let toolHTML = '<table id="toolTable"><tr><th>Drag</th><th>Image</th><th>Icon</th><th>Name</th><th>Link</th><th>Actions</th></tr>';
             tools.forEach((t, i) => {
                 const isSubItem = t.parent !== '' && t.parent !== undefined;
                 toolHTML += `
-                    <tr class="${isSubItem ? 'sub-item' : ''}">
+                    <tr class="tool-row ${isSubItem ? 'sub-item' : ''}" draggable="true" data-index="${i}">
+                        <td style="cursor:move;">☰</td>
                         <td>${t.image ? `<img src="${t.image}" class="preview-img">` : '-'}</td>
                         <td>${isSubItem ? '↳ ' : ''}${t.icon}</td>
                         <td>${t.name}</td>
@@ -190,13 +209,62 @@
                     </tr>
                 `;
             });
-            document.getElementById('toolTable').innerHTML = toolHTML;
+            toolHTML += '</table>';
+            document.getElementById('toolTableContainer').innerHTML = toolHTML;
+
+            // Add drag & drop event listeners
+            addDragAndDrop();
 
             const cards = localStorage.getItem('cardsPerRow') || '3';
             document.getElementById('cardsPerRow').value = cards;
             document.getElementById('currentCards').textContent = cards + ' cards';
 
             document.getElementById('footerText').value = localStorage.getItem('footerText') || '';
+        }
+
+        // Drag & Drop Functions
+        let draggedIndex = null;
+
+        function addDragAndDrop() {
+            const rows = document.querySelectorAll('.tool-row');
+            
+            rows.forEach(row => {
+                row.addEventListener('dragstart', function(e) {
+                    draggedIndex = parseInt(this.dataset.index);
+                    this.classList.add('dragging');
+                });
+
+                row.addEventListener('dragend', function(e) {
+                    this.classList.remove('dragging');
+                    document.querySelectorAll('.tool-row').forEach(r => r.classList.remove('drag-over'));
+                });
+
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('drag-over');
+                });
+
+                row.addEventListener('dragleave', function(e) {
+                    this.classList.remove('drag-over');
+                });
+
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    const dropIndex = parseInt(this.dataset.index);
+                    
+                    if (draggedIndex !== dropIndex) {
+                        // Reorder tools array
+                        const tools = JSON.parse(localStorage.getItem('toolItems'));
+                        const draggedItem = tools[draggedIndex];
+                        tools.splice(draggedIndex, 1);
+                        tools.splice(dropIndex, 0, draggedItem);
+                        localStorage.setItem('toolItems', JSON.stringify(tools));
+                        loadTables();
+                    }
+                    
+                    this.classList.remove('drag-over');
+                });
+            });
         }
 
         // PARENT MENU CRUD
