@@ -85,7 +85,12 @@ nav {
     color: #6c5ce7;
 }
 
+/* Keep dropdown open on hover AND click */
 .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown.active .dropdown-content {
     display: block;
 }
 
