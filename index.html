@@ -207,6 +207,29 @@
         menuHTML += '</div>';
         navbar.innerHTML = menuHTML;
 
+        // Add click event to dropdowns to keep them open
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Toggle active class
+                this.classList.toggle('active');
+                
+                // Close other dropdowns
+                document.querySelectorAll('.dropdown').forEach(other => {
+                    if (other !== this) {
+                        other.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        });
+
         // Load Tools
         const tools = JSON.parse(localStorage.getItem('toolItems'));
         const cardsPerRow = localStorage.getItem('cardsPerRow') || '3';
