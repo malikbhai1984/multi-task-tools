@@ -3,363 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>40+ Free Online Tools - Fast & Secure</title>
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <title>WebAITool - Free Online Tools</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* AI Chat Styles */
+        .chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(108,92,231,0.5);
+            z-index: 1000;
+        }
+        .chat-btn:hover {
+            transform: scale(1.1);
+        }
+        .chat-box {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        .chat-box.active {
+            display: flex;
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background: #6c5ce7;
+            color: white;
+            margin-left: auto;
+        }
+        .bot-message {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            background: white;
+            border-radius: 0 0 15px 15px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: #6c5ce7;
+        }
+        .send-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .send-btn:hover {
+            background: #5f4dd1;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>🛠️ Complete Toolkit Pro</h1>
-        <p>40+ Free Tools | 100% Client-Side | No Upload to Server</p>
-    </header>
+    <nav id="navbar"></nav>
 
-    <nav class="nav-tabs">
-        <button class="nav-btn active" onclick="showCategory('image')">🖼️ Image</button>
-        <button class="nav-btn" onclick="showCategory('qr')">📱 QR</button>
-        <button class="nav-btn" onclick="showCategory('youtube')">📺 YouTube</button>
-        <button class="nav-btn" onclick="showCategory('pdf')">📄 PDF</button>
-        <button class="nav-btn" onclick="showCategory('business')">💼 Business</button>
-        <button class="nav-btn" onclick="showCategory('dev')">💻 Dev</button>
-    </nav>
+    <div class="hero">
+        <h1>Complete AI Toolkit</h1>
+        <p>40+ Free Tools | No Registration | 100% Private</p>
+    </div>
 
-    <main class="container">
-        <!-- IMAGE TOOLS -->
-        <div id="image" class="category active">
-            <div class="tool-card">
-                <h3>🎨 Image Resizer & Converter</h3>
-                <input type="file" id="imgResize" accept="image/*">
-                <input type="number" id="resizeWidth" placeholder="Width" value="800">
-                <input type="number" id="resizeHeight" placeholder="Height" value="600">
-                <select id="imgFormat">
-                    <option value="jpeg">JPEG</option>
-                    <option value="png">PNG</option>
-                    <option value="webp">WebP</option>
-                </select>
-                <button onclick="resizeImage()">Resize</button>
-                <div id="resizeResult" class="result"></div>
-            </div>
+    <div class="tools-section">
+        <h2 class="section-title">Explore Tool Categories</h2>
+        <div class="tools-grid" id="tools-container"></div>
+    </div>
 
-            <div class="tool-card">
-                <h3>🔍 Reverse Image Search</h3>
-                <input type="file" id="revSearchImg" accept="image/*">
-                <button onclick="reverseImageSearch()">Search</button>
-                <div id="revSearchResult" class="result"></div>
-            </div>
+    <footer id="footer"></footer>
 
-            <div class="tool-card">
-                <h3>🗜️ Image Compressor</h3>
-                <input type="file" id="compressImg" accept="image/*">
-                <label>Quality: <input type="range" id="compressQuality" min="10" max="100" value="80"> <span id="qualityVal">80%</span></label>
-                <button onclick="compressImage()">Compress</button>
-                <div id="compressResult" class="result"></div>
+    <!-- AI Chat Button -->
+    <button class="chat-btn" onclick="toggleChat()">💬</button>
+
+    <!-- AI Chat Box -->
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            <h3>🤖 AI Assistant</h3>
+            <button class="close-chat" onclick="toggleChat()">✖</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message bot-message">
+                Hello! I'm your AI assistant. How can I help you today?
             </div>
         </div>
-
-        <!-- QR TOOLS -->
-        <div id="qr" class="category">
-            <div class="tool-card">
-                <h3>🔐 QR Code Scanner</h3>
-                <input type="file" id="qrScanImg" accept="image/*">
-                <button onclick="scanQRCode()">Scan QR</button>
-                <div id="qrScanResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>💰 UPI Payment QR</h3>
-                <input type="text" id="upiId" placeholder="UPI ID">
-                <input type="text" id="upiName" placeholder="Name">
-                <input type="number" id="upiAmount" placeholder="Amount">
-                <button onclick="generateUPIQR()">Generate</button>
-                <div id="upiQR" class="qr-display"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>💬 WhatsApp Link</h3>
-                <input type="text" id="waNumber" placeholder="Phone">
-                <textarea id="waMessage" rows="2" placeholder="Message"></textarea>
-                <button onclick="generateWhatsAppLink()">Generate</button>
-                <div id="waResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>👤 vCard QR</h3>
-                <input type="text" id="vcName" placeholder="Name">
-                <input type="text" id="vcCompany" placeholder="Company">
-                <input type="tel" id="vcPhone" placeholder="Phone">
-                <input type="email" id="vcEmail" placeholder="Email">
-                <button onclick="generateVCardQR()">Generate</button>
-                <div id="vcQR" class="qr-display"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>📶 WiFi QR</h3>
-                <input type="text" id="wifiSSID" placeholder="Network Name">
-                <input type="password" id="wifiPass" placeholder="Password">
-                <select id="wifiType">
-                    <option value="WPA">WPA/WPA2</option>
-                    <option value="WEP">WEP</option>
-                </select>
-                <button onclick="generateWiFiQR()">Generate</button>
-                <div id="wifiQR" class="qr-display"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>📝 Text to QR</h3>
-                <textarea id="textToQR" rows="4" placeholder="Enter text..."></textarea>
-                <button onclick="generateTextToQR()">Generate</button>
-                <div id="textQRDisplay" class="qr-display"></div>
-                <button onclick="downloadQRImage()" id="downloadQRBtn" style="display:none;">Download</button>
-            </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
+    </div>
 
-        <!-- YOUTUBE TOOLS -->
-        <div id="youtube" class="category">
+    <script>
+        // Initialize defaults on first load
+        if (!localStorage.getItem('initialized')) {
+            localStorage.setItem('menuItems', JSON.stringify([
+                {name: 'Home', link: 'index.html', parent: ''},
+                {name: 'Privacy', link: 'privacy.html', parent: ''},
+                {name: 'Contact', link: 'contact.html', parent: ''},
+                {name: 'About', link: 'about.html', parent: ''}
+            ]));
+            
+            localStorage.setItem('toolItems', JSON.stringify([
+                {name: '🖼️ Image Tools', desc: 'Resize, compress, convert images', link: 'image-tools.html', icon: '🖼️'},
+                {name: '📱 QR Tools', desc: 'Generate & scan QR codes', link: 'qr-tools.html', icon: '📱'},
+                {name: '📺 YouTube SEO', desc: 'Optimize YouTube content', link: 'youtube-tools.html', icon: '📺'},
+                {name: '📄 PDF Tools', desc: 'Compress, merge, split PDFs', link: 'pdf-tools.html', icon: '📄'},
+                {name: '💼 Business', desc: 'Invoice, resume, calculators', link: 'business-tools.html', icon: '💼'},
+                {name: '💻 Developer', desc: 'JSON, Base64, passwords', link: 'dev-tools.html', icon: '💻'}
+            ]));
+            
+            localStorage.setItem('cardsPerRow', '3');
+            localStorage.setItem('footerText', '© 2024 WebAITool.net | All Rights Reserved');
+            localStorage.setItem('initialized', 'true');
+        }
+
+        // Load Menu with Dropdown Support (Separate Parent & Sub-Menu)
+        const parents = JSON.parse(localStorage.getItem('parentMenus')) || [];
+        const subs = JSON.parse(localStorage.getItem('subMenus')) || [];
+        const navbar = document.getElementById('navbar');
+        
+        // Build menu with dropdowns
+        let menuHTML = '<a href="index.html" class="logo">🛠️ WebAITool</a><div class="menu-list">';
+        
+        parents.forEach((p, index) => {
+            // Find sub-menus for this parent
+            const children = subs.filter(s => s.parent == index);
+            
+            if (children.length > 0) {
+                // Has dropdown
+                menuHTML += `
+                    <div class="dropdown">
+                        <a href="${p.link || '#'}" class="dropbtn">${p.name} ▼</a>
+                        <div class="dropdown-content">
+                            ${children.map(child => `<a href="${child.link}">${child.name}</a>`).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                // No dropdown, regular link
+                menuHTML += `<a href="${p.link}">${p.name}</a>`;
+            }
+        });
+        
+        menuHTML += '</div>';
+        navbar.innerHTML = menuHTML;
+
+        // Load Tools
+        const tools = JSON.parse(localStorage.getItem('toolItems'));
+        const cardsPerRow = localStorage.getItem('cardsPerRow') || '3';
+        const container = document.getElementById('tools-container');
+        
+        if (cardsPerRow === '2') {
+            container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        } else if (cardsPerRow === '3') {
+            container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        } else if (cardsPerRow === '4') {
+            container.style.gridTemplateColumns = 'repeat(4, 1fr)';
+        }
+        
+        container.innerHTML = tools.map(t => `
             <div class="tool-card">
-                <h3>🖼️ Thumbnail Downloader</h3>
-                <input type="text" id="thumbUrl" placeholder="YouTube URL">
-                <button onclick="downloadThumbnail()">Get Thumbnails</button>
-                <div id="thumbResult" class="result"></div>
+                <div class="tool-icon">${t.icon}</div>
+                <h3>${t.name}</h3>
+                <p>${t.desc}</p>
+                <a href="${t.link}" class="tool-btn">Open Tools →</a>
             </div>
+        `).join('');
 
-            <div class="tool-card">
-                <h3>🎯 Keyword Research</h3>
-                <input type="text" id="keywordInput" placeholder="Keyword">
-                <button onclick="researchKeyword()">Research</button>
-                <div id="keywordResult" class="result"></div>
-            </div>
+        // Load Footer
+        document.getElementById('footer').innerHTML = `<p>${localStorage.getItem('footerText')}</p>`;
 
-            <div class="tool-card">
-                <h3>📊 Title Analyzer</h3>
-                <input type="text" id="titleAnalyze" placeholder="Title">
-                <button onclick="analyzeTitle()">Analyze</button>
-                <div id="titleResult" class="result"></div>
-            </div>
+        // AI Chat Functions
+        function toggleChat() {
+            document.getElementById('chatBox').classList.toggle('active');
+        }
 
-            <div class="tool-card">
-                <h3>📝 Description Generator</h3>
-                <input type="text" id="descTopic" placeholder="Topic">
-                <textarea id="descKeywords" rows="2" placeholder="Keywords"></textarea>
-                <button onclick="generateDescription()">Generate</button>
-                <textarea id="descResult" rows="8" readonly></textarea>
-            </div>
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
 
-            <div class="tool-card">
-                <h3>#️⃣ Hashtag Generator</h3>
-                <input type="text" id="hashInput" placeholder="Topic">
-                <button onclick="generateHashtags()">Generate</button>
-                <div id="hashResult" class="result"></div>
-            </div>
-        </div>
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            // Add user message
+            messagesDiv.innerHTML += `<div class="chat-message user-message">${message}</div>`;
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-        <!-- PDF TOOLS -->
-        <div id="pdf" class="category">
-            <div class="tool-card">
-                <h3>🗜️ PDF Compressor</h3>
-                <input type="file" id="pdfCompress" accept=".pdf">
-                <button onclick="compressPDF()">Compress</button>
-                <div id="pdfCompressResult" class="result"></div>
-            </div>
+            // Show typing indicator
+            messagesDiv.innerHTML += `<div class="chat-message bot-message" id="typing">⏳ AI is typing...</div>`;
 
-            <div class="tool-card">
-                <h3>✂️ PDF Merge</h3>
-                <input type="file" id="pdfMerge" accept=".pdf" multiple>
-                <button onclick="mergePDFs()">Merge</button>
-                <div id="mergeResult" class="result"></div>
-            </div>
+            try {
+                // Try DeepSeek API
+                const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer sk-f3f8469badbc470884b3122da7b6109c'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            {role: 'system', content: 'You are a helpful assistant for WebAITool website. Provide short, helpful answers.'},
+                            {role: 'user', content: message}
+                        ],
+                        max_tokens: 500,
+                        temperature: 0.7
+                    })
+                });
 
-            <div class="tool-card">
-                <h3>📊 Page Counter</h3>
-                <input type="file" id="pdfCounter" accept=".pdf">
-                <button onclick="countPDFPages()">Count</button>
-                <div id="countResult" class="result"></div>
-            </div>
+                // Remove typing indicator
+                const typingElement = document.getElementById('typing');
+                if (typingElement) typingElement.remove();
 
-            <div class="tool-card">
-                <h3>📝 PDF to Text</h3>
-                <input type="file" id="pdfToText" accept=".pdf">
-                <button onclick="convertPDFToText()">Extract</button>
-                <textarea id="pdfTextResult" rows="8" readonly></textarea>
-                <button onclick="copyText('pdfTextResult')">Copy</button>
-            </div>
+                if (response.status === 402) {
+                    // API key has no credits - Use fallback responses
+                    const fallbackResponse = getFallbackResponse(message);
+                    messagesDiv.innerHTML += `<div class="chat-message bot-message">${fallbackResponse}</div>`;
+                } else if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                } else {
+                    const data = await response.json();
+                    const botMessage = data.choices && data.choices[0] && data.choices[0].message 
+                        ? data.choices[0].message.content 
+                        : 'Sorry, I could not get a response.';
+                    
+                    messagesDiv.innerHTML += `<div class="chat-message bot-message">${botMessage}</div>`;
+                }
+                
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            <div class="tool-card">
-                <h3>🌐 HTML to PDF</h3>
-                <textarea id="htmlToPdf" rows="6" placeholder="HTML"></textarea>
-                <button onclick="convertHTMLToPDF()">Convert</button>
-            </div>
-        </div>
+            } catch (error) {
+                // Remove typing indicator
+                const typingElement = document.getElementById('typing');
+                if (typingElement) typingElement.remove();
+                
+                // Use fallback response on error
+                const fallbackResponse = getFallbackResponse(message);
+                messagesDiv.innerHTML += `<div class="chat-message bot-message">${fallbackResponse}</div>`;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                
+                console.error('AI Chat Error:', error);
+            }
+        }
 
-        <!-- BUSINESS TOOLS -->
-        <div id="business" class="category">
-            <div class="tool-card">
-                <h3>🌐 Translator</h3>
-                <textarea id="translateInput" rows="4" placeholder="Text"></textarea>
-                <select id="translateDirection">
-                    <option value="zh-en">Chinese → English</option>
-                    <option value="en-zh">English → Chinese</option>
-                </select>
-                <button onclick="translateText()">Translate</button>
-                <textarea id="translateResult" rows="4" readonly></textarea>
-            </div>
-
-            <div class="tool-card">
-                <h3>📄 Resume Builder</h3>
-                <input type="text" id="resumeName" placeholder="Name">
-                <input type="email" id="resumeEmail" placeholder="Email">
-                <input type="tel" id="resumePhone" placeholder="Phone">
-                <textarea id="resumeSkills" rows="2" placeholder="Skills"></textarea>
-                <textarea id="resumeExp" rows="3" placeholder="Experience"></textarea>
-                <button onclick="generateResume()">Generate</button>
-                <div id="resumeResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>💳 Business Card Scanner</h3>
-                <input type="file" id="cardScan" accept="image/*">
-                <button onclick="scanBusinessCard()">Scan</button>
-                <div id="cardResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>📧 Email Template</h3>
-                <select id="emailType">
-                    <option>Marketing Email</option>
-                    <option>Follow-up Email</option>
-                    <option>Cold Outreach</option>
-                </select>
-                <input type="text" id="emailRecipient" placeholder="Name">
-                <button onclick="generateEmailTemplate()">Generate</button>
-                <textarea id="emailResult" rows="8" readonly></textarea>
-            </div>
-
-            <div class="tool-card">
-                <h3>📊 Invoice Generator</h3>
-                <input type="text" id="invoiceFrom" placeholder="Your Company">
-                <input type="text" id="invoiceTo" placeholder="Client">
-                <input type="number" id="invoiceAmount" placeholder="Amount">
-                <input type="text" id="invoiceDesc" placeholder="Description">
-                <button onclick="generateInvoice()">Generate</button>
-                <div id="invoiceResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>🎯 LinkedIn Optimizer</h3>
-                <input type="text" id="linkedinTitle" placeholder="Job Title">
-                <input type="text" id="linkedinSkills" placeholder="Skills">
-                <button onclick="optimizeLinkedIn()">Optimize</button>
-                <div id="linkedinResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>📈 Currency Converter</h3>
-                <input type="number" id="currAmount" placeholder="Amount" value="100">
-                <select id="currFrom">
-                    <option>USD</option><option>EUR</option><option>GBP</option><option>CNY</option><option>INR</option>
-                </select>
-                <select id="currTo">
-                    <option>EUR</option><option>USD</option><option>GBP</option><option>CNY</option><option>INR</option>
-                </select>
-                <button onclick="convertCurrency()">Convert</button>
-                <div id="currResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>💵 PayPal Fee Calculator</h3>
-                <input type="number" id="paypalAmount" placeholder="Amount">
-                <select id="paypalType">
-                    <option value="2.9">USA (2.9%)</option>
-                    <option value="3.9">International (3.9%)</option>
-                </select>
-                <button onclick="calculatePayPalFee()">Calculate</button>
-                <div id="paypalResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>🧾 Tax Calculator</h3>
-                <input type="number" id="taxAmount" placeholder="Amount">
-                <input type="number" id="taxRate" placeholder="Tax %" value="10">
-                <button onclick="calculateTax()">Calculate</button>
-                <div id="taxResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>📏 Unit Converter</h3>
-                <input type="number" id="unitValue" placeholder="Value">
-                <select id="unitType">
-                    <option value="in-cm">Inches → CM</option>
-                    <option value="cm-in">CM → Inches</option>
-                    <option value="lb-kg">Pounds → KG</option>
-                    <option value="kg-lb">KG → Pounds</option>
-                </select>
-                <button onclick="convertUnit()">Convert</button>
-                <div id="unitResult" class="result"></div>
-            </div>
-        </div>
-
-        <!-- DEVELOPER TOOLS -->
-        <div id="dev" class="category">
-            <div class="tool-card">
-                <h3>📋 JSON to CSV</h3>
-                <textarea id="jsonInput" rows="6" placeholder='[{"name":"John"}]'></textarea>
-                <button onclick="convertJSONToCSV()">Convert</button>
-                <div id="jsonCSVResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>⏰ Timestamp Converter</h3>
-                <input type="number" id="timestamp" placeholder="Timestamp">
-                <button onclick="convertTimestamp()">Convert</button>
-                <button onclick="getCurrentTimestamp()">Now</button>
-                <div id="timestampResult" class="result"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3>🔧 JSON Formatter</h3>
-                <textarea id="jsonFormat" rows="6" placeholder='{"key":"value"}'></textarea>
-                <button onclick="formatJSON()">Format</button>
-                <textarea id="jsonFormatResult" rows="6" readonly></textarea>
-            </div>
-
-            <div class="tool-card">
-                <h3>🔗 URL Encoder</h3>
-                <textarea id="urlInput" rows="3"></textarea>
-                <button onclick="encodeURL()">Encode</button>
-                <button onclick="decodeURL()">Decode</button>
-                <textarea id="urlOutput" rows="3" readonly></textarea>
-            </div>
-
-            <div class="tool-card">
-                <h3>🔐 Password Generator</h3>
-                <input type="number" id="passLength" value="16" min="8" max="50">
-                <label><input type="checkbox" id="passUpper" checked> Upper</label>
-                <label><input type="checkbox" id="passLower" checked> Lower</label>
-                <label><input type="checkbox" id="passNum" checked> Numbers</label>
-                <label><input type="checkbox" id="passSym" checked> Symbols</label>
-                <button onclick="generatePassword()">Generate</button>
-                <input type="text" id="passResult" readonly>
-                <button onclick="copyText('passResult')">Copy</button>
-            </div>
-
-            <div class="tool-card">
-                <h3>🔄 Base64 Encoder</h3>
-                <textarea id="base64Input" rows="4"></textarea>
-                <input type="file" id="base64File" accept="image/*">
-                <button onclick="encodeBase64()">Encode</button>
-                <button onclick="decodeBase64()">Decode</button>
-                <textarea id="base64Output" rows="4" readonly></textarea>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Complete Toolkit Pro | Privacy-First</p>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
-    <script src="script.js?v=2.0"></script>
+        // Fallback AI responses when API is unavailable
+        function getFallbackResponse(message) {
+            const msg = message.toLowerCase();
+            
+            // Tool-related questions
+            if (msg.includes('tool') || msg.includes('feature')) {
+                return "We offer 40+ free tools including Image Tools (resize, compress), QR Code generators, PDF tools (compress, merge), YouTube SEO tools, Business tools (invoice, resume), and Developer tools (JSON formatter, password generator). All tools work 100% client-side for your privacy!";
+            }
+            
+            // Image tools
+            if (msg.includes('image') || msg.includes('photo') || msg.includes('picture')) {
+                return "Our Image Tools include: Image Resizer, Image Compressor, Reverse Image Search, and Format Converter (JPG/PNG/WebP). All processing happens on your device!";
+            }
+            
+            // PDF tools
+            if (msg.includes('pdf')) {
+                return "PDF Tools available: PDF Compressor, PDF Merger, PDF to Text converter, HTML to PDF, and PDF Page Counter. No file uploads - everything processes locally!";
+            }
+            
+            // QR codes
+            if (msg.includes('qr')) {
+                return "QR Code Tools: Generate QR codes for UPI payments, WhatsApp links, WiFi passwords, vCard business cards, and more. Also includes QR code scanner!";
+            }
+            
+            // Privacy
+            if (msg.includes('privacy') || msg.includes('safe') || msg.includes('secure')) {
+                return "All tools process files 100% on your device (client-side). We never upload your files to any server. Your data stays completely private and secure!";
+            }
+            
+            // Pricing
+            if (msg.includes('price') || msg.includes('cost') || msg.includes('free')) {
+                return "All our tools are completely FREE forever! No registration, no hidden fees, no premium plans. Just use any tool anytime!";
+            }
+            
+            // How to use
+            if (msg.includes('how') || msg.includes('use') || msg.includes('work')) {
+                return "Simply select the tool category from the homepage, upload your file (if needed), adjust settings, and click the process button. All tools are designed to be simple and intuitive!";
+            }
+            
+            // Greetings
+            if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+                return "Hello! 👋 I'm here to help you with WebAITool. We have 40+ free tools for images, PDFs, QR codes, YouTube SEO, and more. What would you like to know?";
+            }
+            
+            // Thanks
+            if (msg.includes('thank') || msg.includes('thanks')) {
+                return "You're welcome! Feel free to ask if you need help with any of our tools. Happy to assist! 😊";
+            }
+            
+            // Default response
+            return "I'm here to help! WebAITool offers 40+ free tools including:\n\n🖼️ Image Tools - Resize, compress, convert\n📱 QR Codes - Generate & scan\n📄 PDF Tools - Merge, compress, convert\n📺 YouTube SEO - Thumbnails, analytics\n💼 Business - Invoices, resumes\n💻 Developer - JSON, Base64, passwords\n\nWhat would you like to know more about?";
+        }
+    </script>
 </body>
 </html>
