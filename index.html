@@ -3,202 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAITool - Free Online Tools</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-    
-    
-      <!--Google adsense  code start here-->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4467977670160507"
-     crossorigin="anonymous"></script>
-    
-      <!--Google adsense code finished here-->
-    
-    <!--Google Analytics code start here-->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S323MFXTYL"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-S323MFXTYL');
-    </script>
-    <!--Google Analytics code finished here-->
+    <title>Admin Panel - WebAITool</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 32px; color: #10b981; margin-bottom: 10px; }
+        .status { padding: 12px; border-radius: 8px; margin: 15px 0; text-align: center; display: none; }
+        .status.success { background: #064e3b; color: #10b981; border: 1px solid #10b981; }
+        .status.error { background: #7f1d1d; color: #ef4444; border: 1px solid #ef4444; }
+        .status.info { background: #1e3a8a; color: #60a5fa; border: 1px solid #60a5fa; }
+        .box { background: #1e293b; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #334155; }
+        .box h3 { color: #10b981; margin-bottom: 15px; font-size: 20px; }
+        .box p { color: #94a3b8; margin-bottom: 15px; font-size: 14px; }
+        input, textarea, select { 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #475569; 
+            margin: 8px 5px 8px 0; 
+            width: calc(33.333% - 5px); 
+            background: #0f172a; 
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+        textarea { width: calc(100% - 5px); min-height: 100px; resize: vertical; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #10b981; }
+        button { 
+            padding: 12px 24px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            font-weight: 600; 
+            background: #10b981; 
+            color: white; 
+            margin: 8px 5px 8px 0;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        button:hover { background: #059669; transform: translateY(-1px); }
+        button:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; }
+        .edit-btn { background: #3b82f6; }
+        .edit-btn:hover { background: #2563eb; }
+        .del-btn { background: #ef4444; }
+        .del-btn:hover { background: #dc2626; }
+        .cancel-btn { background: #64748b; }
+        .cancel-btn:hover { background: #475569; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #334155; font-size: 14px; }
+        th { background: #334155; color: #10b981; font-weight: 600; }
+        tr:hover { background: #334155; }
+        .sub-item { padding-left: 40px; background: #0f172a; }
+        .preview-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid #334155; }
+        .tool-row, .footer-row { cursor: move; transition: all 0.3s; }
+        .tool-row:hover, .footer-row:hover { background: #334155; }
+        .tool-row.dragging, .footer-row.dragging { opacity: 0.4; }
+        .tool-row.drag-over, .footer-row.drag-over { border-top: 3px solid #10b981; }
+        .loading { display: none; text-align: center; padding: 20px; color: #10b981; }
+        .loading.show { display: block; }
+        .empty-state { text-align: center; padding: 40px; color: #64748b; }
+        
+        /* Rich Text Editor Toolbar */
+        .editor-toolbar { 
+            display: flex; 
+            gap: 5px; 
+            margin-bottom: 10px; 
+            padding: 10px; 
+            background: #0f172a; 
+            border-radius: 8px; 
+            border: 1px solid #475569;
+            flex-wrap: wrap;
+        }
+        .editor-btn { 
+            padding: 8px 12px; 
+            background: #334155; 
+            border: 1px solid #475569; 
+            color: #e2e8f0; 
+            cursor: pointer; 
+            border-radius: 6px;
+            font-size: 13px;
+            transition: all 0.2s;
+            margin: 0;
+        }
+        .editor-btn:hover { background: #475569; }
+        .editor-btn.active { background: #10b981; color: white; }
+        
+        .editor-content {
+            min-height: 150px;
+            padding: 15px;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #e2e8f0;
+            outline: none;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .editor-content:focus { border-color: #10b981; }
+        
+        @media (max-width: 768px) { 
+            input, select { width: calc(100% - 5px); } 
+            button { width: 100%; margin: 5px 0; }
+            th, td { padding: 10px 8px; font-size: 13px; }
+            .editor-toolbar { gap: 3px; padding: 8px; }
+            .editor-btn { padding: 6px 10px; font-size: 12px; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm" id="navbar">
-        <div class="container-fluid px-4">
-            <a href="index.html" class="navbar-brand logo">🛠️ WebAITool</a>
-            
-            <button class="navbar-toggler hamburger" type="button" id="hamburgerBtn" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            
-            <div class="collapse navbar-collapse justify-content-center" id="menuList">
-                <div class="text-center p-3 text-muted">Loading...</div>
-            </div>
-        </div>
-    </nav>
+    <div class="header">
+        <h1>🔐 Admin Control Panel</h1>
+        <p style="color:#94a3b8;">Manage Your WebAITool Content</p>
+    </div>
 
-    <!-- Search Bar -->
-    <div class="container search-container">
-        <div class="row justify-content-end">
-            <div class="col-lg-8 col-md-10">
-                <div class="search-box">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Search tools, categories, features..." autocomplete="off">
-                    <div class="search-icon">🔍</div>
-                </div>
-            </div>
+    <div id="globalStatus" class="status"></div>
+
+    <!-- Connection Test -->
+    <div class="box">
+        <h3>🔌 Database Connection</h3>
+        <button onclick="testConnection()" id="testBtn">Test Connection</button>
+        <div id="connectionStatus" class="status"></div>
+    </div>
+
+    <!-- Parent Menus -->
+    <div class="box">
+        <h3>1️⃣ Parent Menu Management</h3>
+        <p>Create top-level menu items (e.g., Home, Tools, Contact)</p>
+        <input type="hidden" id="editParentId">
+        <input type="text" id="parentName" placeholder="Menu Name (e.g., Tools)">
+        <input type="text" id="parentLink" placeholder="Link (Optional, default: #)" value="#">
+        <button onclick="saveParent()" id="parentBtn">➕ Add Parent Menu</button>
+        <button onclick="cancelParentEdit()" id="cancelParentBtn" class="cancel-btn" style="display:none;">✕ Cancel</button>
+        <div class="loading" id="parentLoading">Loading...</div>
+        <table id="parentTable">
+            <thead><tr><th>Menu Name</th><th>Link</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="3" class="empty-state">No parent menus yet</td></tr></tbody>
+        </table>
+    </div>
+
+    <!-- Sub Menus -->
+    <div class="box">
+        <h3>2️⃣ Sub-Menu Management</h3>
+        <p>Create dropdown items under parent menus</p>
+        <input type="hidden" id="editSubId">
+        <input type="text" id="subName" placeholder="Sub-Menu Name (e.g., Image Tools)">
+        <input type="text" id="subLink" placeholder="Link (Required, e.g., image-tools.html)">
+        <select id="subParent"><option value="">Select Parent Menu</option></select>
+        <button onclick="saveSub()" id="subBtn">➕ Add Sub-Menu</button>
+        <button onclick="cancelSubEdit()" id="cancelSubBtn" class="cancel-btn" style="display:none;">✕ Cancel</button>
+        <div class="loading" id="subLoading">Loading...</div>
+        <table id="subTable">
+            <thead><tr><th>Sub-Menu</th><th>Link</th><th>Parent</th><th>Actions</th></tr></thead>
+            <tbody><tr><td colspan="4" class="empty-state">No sub-menus yet</td></tr></tbody>
+        </table>
+    </div>
+
+    <!-- Tools -->
+    <div class="box">
+        <h3>3️⃣ Tool Categories (Drag to Reorder)</h3>
+        <p>Add tool cards that appear on homepage</p>
+        <input type="hidden" id="editToolId">
+        <input type="text" id="tName" placeholder="Tool Name (e.g., Image Tools)">
+        <input type="text" id="tIcon" placeholder="Icon Emoji" value="🔧">
+        <input type="text" id="tLink" placeholder="Link (e.g., image-tools.html)">
+        <input type="file" id="tImage" accept="image/*" onchange="previewImage()">
+        <label style="display:block; margin:10px 0; color:#94a3b8;">
+            <input type="checkbox" id="removeImage" style="width:auto; margin-right:8px;">
+            Remove existing image
+        </label>
+        <textarea id="tDesc" placeholder="Tool Description"></textarea>
+        <select id="parentTool"><option value="">Main Category</option></select>
+        <div id="imagePreview" style="margin:15px 0;"></div>
+        <button onclick="saveTool()" id="toolBtn">➕ Add Tool</button>
+        <button onclick="cancelToolEdit()" id="cancelToolBtn" class="cancel-btn" style="display:none;">✕ Cancel</button>
+        <div class="loading" id="toolLoading">Loading...</div>
+        <div id="toolTableContainer">
+            <table>
+                <thead><tr><th>☰</th><th>Image</th><th>Icon</th><th>Name</th><th>Link</th><th>Actions</th></tr></thead>
+                <tbody><tr><td colspan="6" class="empty-state">No tools yet</td></tr></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Complete AI Toolkit</h1>
-            <p class="lead">40+ Free Tools | No Registration | 100% Private</p>
+    <!-- Display Settings -->
+    <div class="box">
+        <h3>4️⃣ Display Settings</h3>
+        <label style="display:block; margin-bottom:10px; color:#94a3b8;">Cards Per Row:</label>
+        <select id="cardsPerRow" onchange="saveCardsPerRow()">
+            <option value="2">2 Cards</option>
+            <option value="3">3 Cards</option>
+            <option value="4">4 Cards</option>
+            <option value="5">5 Cards</option>
+        </select>
+        <p style="margin-top:15px; color:#94a3b8;">Current: <span id="currentCards">3 cards</span></p>
+    </div>
+
+    <!-- ONLY Footer Sections - ID "footer" (Same as old Footer #6) -->
+    <div class="box">
+        <h3>5️⃣ Footer Management (Drag to Reorder)</h3>
+        <p>Create footer sections + copyright text</p>
+        
+        <!-- Copyright Text First -->
+        <label style="display:block; margin-bottom:10px; color:#94a3b8; font-weight:600;">Copyright Text:</label>
+        <textarea id="footerText" rows="2" placeholder="© 2024 WebAITool.net" style="width:calc(100% - 5px);"></textarea>
+        <button onclick="saveFooter()" style="margin-bottom:30px;">💾 Save Copyright</button>
+        
+        <!-- Footer Sections -->
+        <label style="display:block; margin:20px 0 10px 0; color:#94a3b8; font-weight:600;">Footer Sections:</label>
+        <input type="hidden" id="editFooterId">
+        <input type="text" id="footerTitle" placeholder="Section Title (e.g., Quick Links)" style="width: calc(50% - 5px);">
+        
+        <div class="editor-toolbar">
+            <button type="button" class="editor-btn" onclick="formatText('bold')" title="Bold"><b>B</b></button>
+            <button type="button" class="editor-btn" onclick="formatText('italic')" title="Italic"><i>I</i></button>
+            <button type="button" class="editor-btn" onclick="formatText('underline')" title="Underline"><u>U</u></button>
+            <button type="button" class="editor-btn" onclick="formatText('fontSize', '5')" title="Large">A+</button>
+            <button type="button" class="editor-btn" onclick="formatText('fontSize', '3')" title="Normal">A</button>
+            <button type="button" class="editor-btn" onclick="formatText('fontSize', '1')" title="Small">A-</button>
+            <button type="button" class="editor-btn" onclick="insertLink()" title="Add Link">🔗 Link</button>
+            <button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')" title="List">• List</button>
+            <button type="button" class="editor-btn" onclick="formatText('removeFormat')" title="Clear">✕ Clear</button>
+        </div>
+        
+        <div id="footerContent" class="editor-content" contenteditable="true"></div>
+        
+        <div style="margin-top:15px;">
+            <button onclick="saveFooterSection()" id="footerBtn">➕ Add Section</button>
+            <button onclick="cancelFooterEdit()" id="cancelFooterBtn" class="cancel-btn" style="display:none;">✕ Cancel</button>
+        </div>
+        
+        <div class="loading" id="footerLoading">Loading...</div>
+        <div id="footerTableContainer">
+            <table>
+                <thead><tr><th>☰</th><th>Title</th><th>Content Preview</th><th>Actions</th></tr></thead>
+                <tbody><tr><td colspan="4" class="empty-state">No footer sections yet</td></tr></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Tools Section -->
-    <div class="container tools-section">
-        <h2 class="section-title text-center mb-5">Explore Tool Categories</h2>
-        <div class="row g-4" id="tools-container">
-            <div class="col-12 text-center p-5 text-muted">Loading tools...</div>
-        </div>
+    <!-- Actions -->
+    <div style="text-align:center; margin-top:30px;">
+        <button style="background:#6366f1;" onclick="window.open('index.html', '_blank')">👁️ Preview Site</button>
+        <button style="background:#8b5cf6;" onclick="loadAll()">🔄 Refresh Data</button>
     </div>
 
-    <!-- Dynamic Footer - Same ID as other pages -->
-    <footer class="bg-dark text-white text-center py-4 mt-auto" id="site-footer">
-        <p class="mb-0">Loading...</p>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JS -->
     <script>
         const API = 'api.php';
-        let allToolsData = [];
+        let editingParentId = null;
+        let editingSubId = null;
+        let editingToolId = null;
+        let editingFooterId = null;
+        let currentImageBase64 = '';
 
-        async function apiCall(action) {
+        function showStatus(message, type = 'info', elementId = 'globalStatus') {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = 'status ' + type + ' show';
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        async function apiCall(action, data = {}) {
             try {
-                const timestamp = new Date().getTime();
-                const response = await fetch(`${API}?action=${action}&_t=${timestamp}`, {
-                    cache: 'no-store',
-                    headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    }
-                });
+                const formData = new FormData();
+                formData.append('action', action);
+                for(let key in data) {
+                    formData.append(key, data[key]);
+                }
+                
+                const response = await fetch(API, { method: 'POST', body: formData });
                 const text = await response.text();
-                return JSON.parse(text);
+                
+                try {
+                    return JSON.parse(text);
+                } catch(e) {
+                    console.error('Response:', text);
+                    throw new Error('Invalid server response');
+                }
             } catch(error) {
                 console.error('API Error:', error);
                 throw error;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const menuList = document.getElementById('menuList');
-            
-            if(hamburgerBtn) {
-                hamburgerBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    menuList.classList.toggle('show');
-                    hamburgerBtn.classList.toggle('active');
-                });
-            }
-        });
-
-        function toggleDropdown(id, event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            const clickedDropdown = document.querySelector(`[data-dropdown="${id}"]`);
-            const allDropdowns = document.querySelectorAll('.dropdown');
-            
-            allDropdowns.forEach(dropdown => {
-                if(dropdown !== clickedDropdown) {
-                    dropdown.classList.remove('active');
-                }
-            });
-            
-            clickedDropdown.classList.toggle('active');
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('footerContent').focus();
         }
 
-        function searchTools() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        function insertLink() {
+            const selection = window.getSelection();
+            const selectedText = selection.toString().trim();
             
-            if(!searchTerm) {
-                displayTools(allToolsData);
+            if(!selectedText) {
+                alert('⚠️ Pehle text select karo, phir link button dabao!');
                 return;
             }
             
-            const filteredTools = allToolsData.filter(tool => {
-                return tool.name.toLowerCase().includes(searchTerm) ||
-                       (tool.description && tool.description.toLowerCase().includes(searchTerm)) ||
-                       (tool.icon && tool.icon.toLowerCase().includes(searchTerm));
-            });
-            
-            displayTools(filteredTools);
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            if(searchInput) {
-                searchInput.addEventListener('keyup', searchTools);
-                searchInput.addEventListener('input', searchTools);
-            }
-        });
-        
-        function displayTools(tools) {
-            const container = document.getElementById('tools-container');
-            
-            if(tools.length > 0) {
-                container.innerHTML = tools.map(tool => {
-                    const hasImage = tool.image && tool.image.trim() !== '';
-                    let displayName = tool.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
-                    
-                    return `
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                        <div class="tool-card card h-100 border-0 shadow-sm">
-                            <div class="card-body text-center">
-                                ${hasImage ? `
-                                    <img src="${tool.image}" class="card-img-top rounded mb-3" 
-                                         style="height:150px; object-fit:cover;" 
-                                         alt="${displayName}"
-                                         onerror="this.style.display='none'">
-                                ` : `<div class="tool-icon">${tool.icon}</div>`}
-                                <h3 class="card-title h5">${displayName}</h3>
-                                <p class="card-text text-muted">${tool.description || 'Explore this tool'}</p>
-                                <a href="${tool.link}" class="btn btn-primary tool-btn">Open Tool →</a>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-                }).join('');
-            } else {
-                container.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <div style="font-size:64px; margin-bottom:20px;">🔍</div>
-                        <h3>No Results Found</h3>
-                        <p class="text-muted">Try searching with different keywords</p>
-                    </div>
-                `;
+            const url = prompt('Link URL enter karo:', 'https://');
+            if(url && url !== 'https://') {
+                document.execCommand('createLink', false, url);
+                const range = selection.getRangeAt(0);
+                if(range) {
+                    const link = range.startContainer.parentElement;
+                    if(link && link.tagName === 'A') {
+                        link.style.color = '#10b981';
+                        link.style.textDecoration = 'underline';
+                    }
+                }
+                document.getElementById('footerContent').focus();
             }
         }
 
-        async function loadWebsite() {
+        async function testConnection() {
+            const btn = document.getElementById('testBtn');
+            const status = document.getElementById('connectionStatus');
+            
+            btn.disabled = true;
+            btn.textContent = 'Testing...';
+            status.textContent = 'Connecting...';
+            status.className = 'status info show';
+            
+            try {
+                const result = await apiCall('get_parent_menus');
+                status.textContent = '✅ Connected! Found ' + result.length + ' parent menus';
+                status.className = 'status success show';
+                loadAll();
+            } catch(error) {
+                status.textContent = '❌ Failed: ' + error.message;
+                status.className = 'status error show';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Test Connection';
+            }
+        }
+
+        async function loadAll() {
             try {
                 const [parents, subs, tools, settings, footerSections] = await Promise.all([
                     apiCall('get_parent_menus'),
@@ -208,102 +346,445 @@
                     apiCall('get_footer_sections')
                 ]);
 
-                // Build Navigation
-                let menuHTML = '<ul class="navbar-nav">';
-                
-                if(parents && parents.length > 0) {
-                    parents.forEach(parent => {
-                        const children = subs.filter(s => s.parent_id == parent.id);
-                        
-                        if (children.length > 0) {
-                            menuHTML += `
-                                <li class="nav-item dropdown" data-dropdown="${parent.id}">
-                                    <a class="nav-link dropdown-toggle dropbtn" href="#" onclick="toggleDropdown(${parent.id}, event)">${parent.name}</a>
-                                    <ul class="dropdown-menu dropdown-content">
-                                        ${children.map(child => `<li><a class="dropdown-item" href="${child.link}">${child.name}</a></li>`).join('')}
-                                    </ul>
-                                </li>
-                            `;
-                        } else {
-                            menuHTML += `<li class="nav-item"><a class="nav-link" href="${parent.link}">${parent.name}</a></li>`;
-                        }
-                    });
+                const parentTbody = document.querySelector('#parentTable tbody');
+                if(parents.length > 0) {
+                    parentTbody.innerHTML = parents.map(p => `
+                        <tr>
+                            <td><strong>${escHtml(p.name)}</strong></td>
+                            <td>${escHtml(p.link || '-')}</td>
+                            <td>
+                                <button class="edit-btn" onclick="editParent(${p.id}, '${escHtml(p.name).replace(/'/g, "\\'")}', '${escHtml(p.link).replace(/'/g, "\\'")}')">✏️</button>
+                                <button class="del-btn" onclick="deleteParent(${p.id})">🗑️</button>
+                            </td>
+                        </tr>
+                    `).join('');
                 } else {
-                    menuHTML += '<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>';
-                    menuHTML += '<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>';
+                    parentTbody.innerHTML = '<tr><td colspan="3" class="empty-state">No parent menus</td></tr>';
                 }
-                
-                menuHTML += '</ul>';
-                document.getElementById('menuList').innerHTML = menuHTML;
 
-                // Build Tools
-                const mainTools = tools && tools.length > 0 
-                    ? tools.filter(t => !t.parent_id) 
-                    : [];
-                
-                allToolsData = mainTools;
-                displayTools(mainTools);
+                const parentOpts = parents.map(p => `<option value="${p.id}">${escHtml(p.name)}</option>`).join('');
+                document.getElementById('subParent').innerHTML = '<option value="">Select Parent</option>' + parentOpts;
 
-                // Build Footer - Load sections if available
-                const footerElement = document.getElementById('site-footer');
-                
-                if(footerSections && footerSections.length > 0) {
-                    // Has footer sections - build multi-section footer
-                    const colClass = footerSections.length === 1 ? 'col-12' :
-                                    footerSections.length === 2 ? 'col-md-6' :
-                                    footerSections.length === 3 ? 'col-md-4' :
-                                    footerSections.length === 4 ? 'col-md-3' :
-                                    'col-md-2';
-                    
-                    let footerHTML = `<div class="container py-5"><div class="row g-4">`;
-                    footerSections.forEach(section => {
-                        footerHTML += `
-                            <div class="${colClass}">
-                                <div class="footer-section">
-                                    <h5 class="footer-title">${section.title}</h5>
-                                    <div class="footer-content">${section.content}</div>
-                                </div>
-                            </div>
+                const subTbody = document.querySelector('#subTable tbody');
+                if(subs.length > 0) {
+                    subTbody.innerHTML = subs.map(s => {
+                        const parent = parents.find(p => p.id == s.parent_id);
+                        return `
+                            <tr class="sub-item">
+                                <td>↳ ${escHtml(s.name)}</td>
+                                <td>${escHtml(s.link)}</td>
+                                <td>${parent ? escHtml(parent.name) : 'None'}</td>
+                                <td>
+                                    <button class="edit-btn" onclick="editSub(${s.id}, '${escHtml(s.name).replace(/'/g, "\\'")}', '${escHtml(s.link).replace(/'/g, "\\'")}', ${s.parent_id})">✏️</button>
+                                    <button class="del-btn" onclick="deleteSub(${s.id})">🗑️</button>
+                                </td>
+                            </tr>
                         `;
-                    });
-                    footerHTML += `</div></div>`;
-                    
-                    if(settings && settings.footer_text) {
-                        footerHTML += `<div class="footer-bottom text-center py-3 border-top border-secondary"><p class="mb-0">${settings.footer_text}</p></div>`;
-                    }
-                    
-                    footerElement.innerHTML = footerHTML;
+                    }).join('');
                 } else {
-                    // No sections - just simple copyright like resume page
-                    if (settings && settings.footer_text) {
-                        footerElement.innerHTML = `<p class="mb-0">${settings.footer_text}</p>`;
-                    }
+                    subTbody.innerHTML = '<tr><td colspan="4" class="empty-state">No sub-menus</td></tr>';
                 }
 
-                console.log('✅ Website loaded!');
+                const mainTools = tools.filter(t => !t.parent_id);
+                const toolParentOpts = mainTools.map(t => `<option value="${t.id}">${escHtml(t.name)}</option>`).join('');
+                document.getElementById('parentTool').innerHTML = '<option value="">Main Category</option>' + toolParentOpts;
 
+                const toolContainer = document.getElementById('toolTableContainer');
+                if(tools.length > 0) {
+                    let toolHTML = '<table id="toolTable"><thead><tr><th>☰</th><th>Image</th><th>Icon</th><th>Name</th><th>Link</th><th>Actions</th></tr></thead><tbody>';
+                    toolHTML += tools.map(t => {
+                        let displayName = t.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+                        return `
+                            <tr class="tool-row" draggable="true" data-id="${t.id}">
+                                <td style="cursor:move;">☰</td>
+                                <td>${t.image ? `<img src="${t.image}" class="preview-img">` : '-'}</td>
+                                <td>${t.parent_id ? '↳ ' : ''}${escHtml(t.icon)}</td>
+                                <td>${escHtml(displayName)}</td>
+                                <td>${escHtml(t.link)}</td>
+                                <td>
+                                    <button class="edit-btn" onclick="editToolById(${t.id})">✏️</button>
+                                    <button class="del-btn" onclick="deleteTool(${t.id})">🗑️</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                    toolHTML += '</tbody></table>';
+                    toolContainer.innerHTML = toolHTML;
+                    initDragDrop();
+                } else {
+                    toolContainer.innerHTML = '<table><tbody><tr><td class="empty-state">No tools</td></tr></tbody></table>';
+                }
+
+                const footerContainer = document.getElementById('footerTableContainer');
+                if(footerSections.length > 0) {
+                    let footerHTML = '<table id="footerTable"><thead><tr><th>☰</th><th>Title</th><th>Content Preview</th><th>Actions</th></tr></thead><tbody>';
+                    footerHTML += footerSections.map(f => {
+                        const preview = f.content.replace(/<[^>]*>/g, '').substring(0, 80);
+                        return `
+                            <tr class="footer-row" draggable="true" data-id="${f.id}">
+                                <td style="cursor:move;">☰</td>
+                                <td><strong>${escHtml(f.title)}</strong></td>
+                                <td>${preview}...</td>
+                                <td>
+                                    <button class="edit-btn" onclick="editFooterById(${f.id})">✏️</button>
+                                    <button class="del-btn" onclick="deleteFooterSection(${f.id})">🗑️</button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                    footerHTML += '</tbody></table>';
+                    footerContainer.innerHTML = footerHTML;
+                    initFooterDragDrop();
+                } else {
+                    footerContainer.innerHTML = '<table><tbody><tr><td colspan="4" class="empty-state">No footer sections</td></tr></tbody></table>';
+                }
+
+                document.getElementById('cardsPerRow').value = settings.cards_per_row || '3';
+                document.getElementById('currentCards').textContent = (settings.cards_per_row || '3') + ' cards';
+                document.getElementById('footerText').value = settings.footer_text || '';
+
+                window.allTools = tools;
+                window.allFooterSections = footerSections;
+
+                showStatus('✅ Data loaded!', 'success');
             } catch(error) {
-                console.error('Load Error:', error);
-                
-                document.getElementById('menuList').innerHTML = `
-                    <div class="alert alert-danger">❌ Error loading menu</div>
-                `;
-                
-                document.getElementById('tools-container').innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <div style="font-size:64px; margin-bottom:20px;">⚠️</div>
-                        <h3>Failed to Load</h3>
-                        <p class="text-danger">${error.message}</p>
-                        <button onclick="location.reload()" class="btn btn-primary mt-3">🔄 Refresh</button>
-                    </div>
-                `;
-                
-                document.getElementById('site-footer').innerHTML = `<p class="mb-0">Error loading footer</p>`;
+                showStatus('❌ Failed: ' + error.message, 'error');
             }
         }
 
-        // Load immediately without waiting for DOMContentLoaded
-        loadWebsite();
+        function escHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        function initDragDrop() {
+            let draggedId = null;
+            document.querySelectorAll('.tool-row').forEach(row => {
+                row.ondragstart = () => { draggedId = row.dataset.id; row.classList.add('dragging'); };
+                row.ondragend = () => { row.classList.remove('dragging'); document.querySelectorAll('.tool-row').forEach(r => r.classList.remove('drag-over')); };
+                row.ondragover = e => { e.preventDefault(); row.classList.add('drag-over'); };
+                row.ondragleave = () => row.classList.remove('drag-over');
+                row.ondrop = async e => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+                    const dropId = row.dataset.id;
+                    if(draggedId !== dropId) {
+                        try {
+                            const tools = await apiCall('get_tools');
+                            const dragIdx = tools.findIndex(t => t.id == draggedId);
+                            const dropIdx = tools.findIndex(t => t.id == dropId);
+                            const [item] = tools.splice(dragIdx, 1);
+                            tools.splice(dropIdx, 0, item);
+                            await apiCall('reorder_tools', {order: JSON.stringify(tools.map(t => t.id))});
+                            showStatus('✅ Reordered!', 'success');
+                            loadAll();
+                        } catch(error) {
+                            showStatus('❌ Failed: ' + error.message, 'error');
+                        }
+                    }
+                };
+            });
+        }
+
+        function initFooterDragDrop() {
+            let draggedId = null;
+            document.querySelectorAll('.footer-row').forEach(row => {
+                row.ondragstart = () => { draggedId = row.dataset.id; row.classList.add('dragging'); };
+                row.ondragend = () => { row.classList.remove('dragging'); document.querySelectorAll('.footer-row').forEach(r => r.classList.remove('drag-over')); };
+                row.ondragover = e => { e.preventDefault(); row.classList.add('drag-over'); };
+                row.ondragleave = () => row.classList.remove('drag-over');
+                row.ondrop = async e => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+                    const dropId = row.dataset.id;
+                    if(draggedId !== dropId) {
+                        try {
+                            const sections = await apiCall('get_footer_sections');
+                            const dragIdx = sections.findIndex(s => s.id == draggedId);
+                            const dropIdx = sections.findIndex(s => s.id == dropId);
+                            const [item] = sections.splice(dragIdx, 1);
+                            sections.splice(dropIdx, 0, item);
+                            await apiCall('reorder_footer_sections', {order: JSON.stringify(sections.map(s => s.id))});
+                            showStatus('✅ Reordered!', 'success');
+                            loadAll();
+                        } catch(error) {
+                            showStatus('❌ Failed: ' + error.message, 'error');
+                        }
+                    }
+                };
+            });
+        }
+
+        async function saveParent() {
+            const name = document.getElementById('parentName').value.trim();
+            const link = document.getElementById('parentLink').value.trim() || '#';
+            if(!name) return showStatus('⚠️ Enter name!', 'error');
+            
+            try {
+                if(editingParentId) {
+                    await apiCall('update_parent_menu', {id: editingParentId, name, link});
+                    showStatus('✅ Updated!', 'success');
+                } else {
+                    await apiCall('add_parent_menu', {name, link});
+                    showStatus('✅ Added!', 'success');
+                }
+                cancelParentEdit();
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function editParent(id, name, link) {
+            editingParentId = id;
+            document.getElementById('parentName').value = name;
+            document.getElementById('parentLink').value = link;
+            document.getElementById('parentBtn').textContent = '💾 Update';
+            document.getElementById('cancelParentBtn').style.display = 'inline-block';
+        }
+
+        function cancelParentEdit() {
+            editingParentId = null;
+            document.getElementById('parentName').value = '';
+            document.getElementById('parentLink').value = '#';
+            document.getElementById('parentBtn').textContent = '➕ Add Parent Menu';
+            document.getElementById('cancelParentBtn').style.display = 'none';
+        }
+
+        async function deleteParent(id) {
+            if(!confirm('Delete?')) return;
+            try {
+                await apiCall('delete_parent_menu', {id});
+                showStatus('✅ Deleted!', 'success');
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Failed: ' + error.message, 'error');
+            }
+        }
+
+        async function saveSub() {
+            const name = document.getElementById('subName').value.trim();
+            const link = document.getElementById('subLink').value.trim();
+            const parent = document.getElementById('subParent').value;
+            if(!name || !link || !parent) return showStatus('⚠️ Fill all!', 'error');
+            
+            try {
+                if(editingSubId) {
+                    await apiCall('update_sub_menu', {id: editingSubId, name, link, parent});
+                    showStatus('✅ Updated!', 'success');
+                } else {
+                    await apiCall('add_sub_menu', {name, link, parent});
+                    showStatus('✅ Added!', 'success');
+                }
+                cancelSubEdit();
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function editSub(id, name, link, parent) {
+            editingSubId = id;
+            document.getElementById('subName').value = name;
+            document.getElementById('subLink').value = link;
+            document.getElementById('subParent').value = parent;
+            document.getElementById('subBtn').textContent = '💾 Update';
+            document.getElementById('cancelSubBtn').style.display = 'inline-block';
+        }
+
+        function cancelSubEdit() {
+            editingSubId = null;
+            document.getElementById('subName').value = '';
+            document.getElementById('subLink').value = '';
+            document.getElementById('subParent').value = '';
+            document.getElementById('subBtn').textContent = '➕ Add Sub-Menu';
+            document.getElementById('cancelSubBtn').style.display = 'none';
+        }
+
+        async function deleteSub(id) {
+            if(!confirm('Delete?')) return;
+            try {
+                await apiCall('delete_sub_menu', {id});
+                showStatus('✅ Deleted!', 'success');
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Failed: ' + error.message, 'error');
+            }
+        }
+
+        function previewImage() {
+            const file = document.getElementById('tImage').files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                currentImageBase64 = e.target.result;
+                document.getElementById('imagePreview').innerHTML = `<img src="${currentImageBase64}" style="max-width:200px; border-radius:8px; border:2px solid #334155;">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveTool() {
+            const name = document.getElementById('tName').value.trim();
+            const icon = document.getElementById('tIcon').value.trim();
+            const link = document.getElementById('tLink').value.trim();
+            const description = document.getElementById('tDesc').value.trim();
+            const parent = document.getElementById('parentTool').value || null;
+            const removeImage = document.getElementById('removeImage').checked;
+            
+            if(!name || !link || !description) return showStatus('⚠️ Fill required fields!', 'error');
+            
+            let imageValue = currentImageBase64;
+            if(removeImage) imageValue = '';
+            
+            try {
+                if(editingToolId) {
+                    await apiCall('update_tool', {id: editingToolId, name, icon, link, description, image: imageValue, parent});
+                    showStatus('✅ Updated!', 'success');
+                } else {
+                    await apiCall('add_tool', {name, icon, link, description, image: imageValue, parent});
+                    showStatus('✅ Added!', 'success');
+                }
+                cancelToolEdit();
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function editToolById(toolId) {
+            try {
+                const tool = window.allTools.find(t => t.id == toolId);
+                if(!tool) return showStatus('❌ Not found', 'error');
+                
+                editingToolId = tool.id;
+                document.getElementById('tName').value = tool.name || '';
+                document.getElementById('tIcon').value = tool.icon || '🔧';
+                document.getElementById('tLink').value = tool.link || '';
+                document.getElementById('tDesc').value = tool.description || '';
+                document.getElementById('parentTool').value = tool.parent_id || '';
+                document.getElementById('removeImage').checked = false;
+                currentImageBase64 = tool.image || '';
+                
+                if(currentImageBase64 && currentImageBase64.trim() !== '') {
+                    document.getElementById('imagePreview').innerHTML = `<img src="${currentImageBase64}" style="max-width:200px; border-radius:8px; border:2px solid #334155;">`;
+                } else {
+                    document.getElementById('imagePreview').innerHTML = '';
+                }
+                
+                document.getElementById('toolBtn').textContent = '💾 Update';
+                document.getElementById('cancelToolBtn').style.display = 'inline-block';
+                document.getElementById('tName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch(error) {
+                showStatus('❌ Error', 'error');
+            }
+        }
+
+        function cancelToolEdit() {
+            editingToolId = null;
+            document.getElementById('tName').value = '';
+            document.getElementById('tIcon').value = '🔧';
+            document.getElementById('tLink').value = '';
+            document.getElementById('tDesc').value = '';
+            document.getElementById('tImage').value = '';
+            document.getElementById('parentTool').value = '';
+            document.getElementById('removeImage').checked = false;
+            document.getElementById('imagePreview').innerHTML = '';
+            currentImageBase64 = '';
+            document.getElementById('toolBtn').textContent = '➕ Add Tool';
+            document.getElementById('cancelToolBtn').style.display = 'none';
+        }
+
+        async function deleteTool(id) {
+            if(!confirm('Delete?')) return;
+            try {
+                await apiCall('delete_tool', {id});
+                showStatus('✅ Deleted!', 'success');
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Failed: ' + error.message, 'error');
+            }
+        }
+
+        async function saveFooterSection() {
+            const title = document.getElementById('footerTitle').value.trim();
+            const content = document.getElementById('footerContent').innerHTML.trim();
+            
+            if(!title) return showStatus('⚠️ Enter title!', 'error');
+            if(!content) return showStatus('⚠️ Enter content!', 'error');
+            
+            try {
+                if(editingFooterId) {
+                    await apiCall('update_footer_section', {id: editingFooterId, title, content});
+                    showStatus('✅ Updated!', 'success');
+                } else {
+                    await apiCall('add_footer_section', {title, content});
+                    showStatus('✅ Added!', 'success');
+                }
+                cancelFooterEdit();
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function editFooterById(footerId) {
+            try {
+                const section = window.allFooterSections.find(s => s.id == footerId);
+                if(!section) return showStatus('❌ Not found', 'error');
+                
+                editingFooterId = section.id;
+                document.getElementById('footerTitle').value = section.title || '';
+                document.getElementById('footerContent').innerHTML = section.content || '';
+                document.getElementById('footerBtn').textContent = '💾 Update';
+                document.getElementById('cancelFooterBtn').style.display = 'inline-block';
+                document.getElementById('footerTitle').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch(error) {
+                showStatus('❌ Error', 'error');
+            }
+        }
+
+        function cancelFooterEdit() {
+            editingFooterId = null;
+            document.getElementById('footerTitle').value = '';
+            document.getElementById('footerContent').innerHTML = '';
+            document.getElementById('footerBtn').textContent = '➕ Add Section';
+            document.getElementById('cancelFooterBtn').style.display = 'none';
+        }
+
+        async function deleteFooterSection(id) {
+            if(!confirm('Delete?')) return;
+            try {
+                await apiCall('delete_footer_section', {id});
+                showStatus('✅ Deleted!', 'success');
+                loadAll();
+            } catch(error) {
+                showStatus('❌ Failed: ' + error.message, 'error');
+            }
+        }
+
+        async function saveCardsPerRow() {
+            const value = document.getElementById('cardsPerRow').value;
+            try {
+                await apiCall('update_setting', {key: 'cards_per_row', value});
+                document.getElementById('currentCards').textContent = value + ' cards';
+                showStatus('✅ Saved!', 'success');
+            } catch(error) {
+                showStatus('❌ Failed: ' + error.message, 'error');
+            }
+        }
+
+        async function saveFooter() {
+            const value = document.getElementById('footerText').value;
+            try {
+                await apiCall('update_setting', {key: 'footer_text', value});
+                showStatus('✅ Saved!', 'success');
+            } catch(error) {
+                showStatus('❌ Failed: ' + error.message, 'error');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', testConnection);
     </script>
 </body>
 </html>
