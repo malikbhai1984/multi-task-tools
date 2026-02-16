@@ -56,16 +56,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <!-- Bootstrap CSS (Required for navbar structure) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- Link to style.css for navbar and footer styling -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Page-specific styles - navbar/footer from style.css */
+    
     :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
+      --primary: #6c5ce7;
+      --primary-dark: #5f4dd1;
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
@@ -76,24 +78,28 @@
       --border: #e2e8f0;
     }
 
+    /* Override body background for this page */
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f7f6 !important;
+    }
+
+    .page-wrapper {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 20px;
-      color: var(--text-primary);
-      line-height: 1.6;
+      min-height: calc(100vh - 200px);
+      padding: 20px 0;
     }
 
     .container {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 20px;
     }
 
     header {
       text-align: center;
       margin-bottom: 40px;
       animation: fadeInDown 0.6s ease-out;
+      margin-top: 20px;
     }
 
     @keyframes fadeInDown {
@@ -142,13 +148,13 @@
     }
 
     .upload-section:hover {
-      border-color: var(--primary);
+      border-color: #6c5ce7;
       background: #f1f5f9;
       transform: translateY(-2px);
     }
 
     .upload-section.drag-over {
-      border-color: var(--primary);
+      border-color: #6c5ce7;
       background: #eff6ff;
       transform: scale(1.02);
     }
@@ -166,7 +172,7 @@
     .upload-label {
       display: inline-block;
       padding: 14px 32px;
-      background: var(--primary);
+      background: #6c5ce7;
       color: white;
       border-radius: 10px;
       cursor: pointer;
@@ -177,9 +183,9 @@
     }
 
     .upload-label:hover {
-      background: var(--primary-dark);
+      background: #5f4dd1;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
     }
 
     .options-grid {
@@ -217,8 +223,8 @@
 
     select:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      border-color: #6c5ce7;
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
     }
 
     input[type="color"] {
@@ -228,16 +234,16 @@
     }
 
     .color-presets {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
       gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
     .color-preset {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 100%;
+      height: 36px;
+      border-radius: 6px;
       cursor: pointer;
       border: 3px solid transparent;
       transition: all 0.2s ease;
@@ -245,18 +251,18 @@
 
     .color-preset:hover {
       transform: scale(1.1);
-      border-color: var(--primary);
+      border-color: #6c5ce7;
     }
 
     .color-preset.active {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary);
+      border-color: #6c5ce7;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #6c5ce7;
     }
 
     .process-btn {
       width: 100%;
       padding: 18px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: linear-gradient(135deg, #6c5ce7 0%, #5f4dd1 100%);
       color: white;
       border: none;
       border-radius: 12px;
@@ -266,12 +272,12 @@
       transition: all 0.3s ease;
       font-family: 'Poppins', sans-serif;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
     }
 
     .process-btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
     }
 
     .process-btn:disabled {
@@ -309,7 +315,8 @@
     }
 
     .preview-container {
-      margin-top: 30px;
+      margin-bottom: 30px;
+      margin-top: 0;
     }
 
     .preview-grid {
@@ -341,6 +348,65 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border: 1px solid var(--border);
       background: white;
+    }
+
+    .image-editor {
+      position: relative;
+      display: inline-block;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .editor-canvas-container {
+      position: relative;
+      display: inline-block;
+      background: white;
+      border: 2px dashed #6c5ce7;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: move;
+    }
+
+    .editor-canvas-container:active {
+      cursor: grabbing;
+    }
+
+    .editor-canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .editor-controls {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .editor-controls button {
+      padding: 8px 16px;
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .editor-controls button:hover {
+      background: #5f4dd1;
+      transform: translateY(-1px);
+    }
+
+    .zoom-slider {
+      width: 200px;
+      margin: 0 10px;
     }
 
     .download-btn {
@@ -385,7 +451,7 @@
       font-weight: 700;
       margin-top: 30px;
       margin-bottom: 15px;
-      color: var(--primary);
+      color: #6c5ce7;
     }
 
     .info-section p {
@@ -415,7 +481,7 @@
       background: var(--background);
       padding: 20px;
       border-radius: 12px;
-      border-left: 4px solid var(--primary);
+      border-left: 4px solid #6c5ce7;
     }
 
     .country-card h4 {
@@ -498,17 +564,51 @@
       .info-section {
         padding: 24px;
       }
+
+      .color-presets {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+      }
+
+      .color-preset {
+        height: 32px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>📸 Professional Passport Photo Maker</h1>
-      <p class="subtitle">Create perfect passport photos for any country in seconds with AI</p>
-    </header>
+  <!-- Navigation - Dynamic from API with style.css styling -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" id="navbar">
+    <div class="container-fluid px-4">
+      <a href="index.html" class="navbar-brand logo">🛠️ WebAITool</a>
+      
+      <button class="navbar-toggler hamburger" type="button" id="hamburgerBtn" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <div class="collapse navbar-collapse justify-content-center" id="menuList">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="page-wrapper">
+    <div class="container">
+      <header>
+        <h1>📸 Professional Passport Photo Maker</h1>
+        <p class="subtitle">Create perfect passport photos for any country in seconds with AI</p>
+      </header>
 
     <div class="main-card">
+      <!-- Preview Container at TOP -->
+      <div class="preview-container" id="previewContainer"></div>
+
       <!-- Upload Section -->
       <div class="upload-section" id="dropZone">
         <div class="upload-icon">📷</div>
@@ -517,8 +617,12 @@
           Drag & drop your photo here or click to browse<br>
           <small>Supports JPG, PNG, WebP • Maximum 10MB</small>
         </p>
-        <label for="imageInput" class="upload-label">Choose Photo</label>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <label for="imageInput" class="upload-label">📁 Choose Photo</label>
+          <label for="cameraInput" class="upload-label" style="background: #10b981;">📸 Take Photo</label>
+        </div>
         <input type="file" id="imageInput" accept="image/jpeg,image/png,image/webp">
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
       </div>
 
       <!-- Options Grid -->
@@ -572,15 +676,26 @@
         <!-- Background Color Selection -->
         <div class="option-group">
           <label for="bgColorPicker">🎨 Background Color</label>
-          <input type="color" id="bgColorPicker" value="#ffffff">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <input type="color" id="bgColorPicker" value="#ffffff" style="flex: 1;">
+            <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">👆 More colors here</span>
+          </div>
           <div class="color-presets">
-            <div class="color-preset active" data-color="#ffffff" style="background: #ffffff; border: 2px solid #ccc;" title="White (USA, India, Pakistan)"></div>
-            <div class="color-preset" data-color="#f5f5f5" style="background: #f5f5f5;" title="Off White (Canada)"></div>
-            <div class="color-preset" data-color="#e8f4f8" style="background: #e8f4f8;" title="Light Blue (China)"></div>
-            <div class="color-preset" data-color="#99ccff" style="background: #99ccff;" title="Blue (China, EU)"></div>
-            <div class="color-preset" data-color="#1a73e8" style="background: #1a73e8;" title="Dark Blue"></div>
-            <div class="color-preset" data-color="#f0f0f0" style="background: #f0f0f0;" title="Light Gray (UK, EU)"></div>
-            <div class="color-preset" data-color="#fef5e7" style="background: #fef5e7;" title="Cream (UK)"></div>
+            <div class="color-preset active" data-color="#ffffff" style="background: #ffffff; border: 2px solid #ccc;" title="White (USA, India, Pakistan, Bangladesh)"></div>
+            <div class="color-preset" data-color="#f5f5f5" style="background: #f5f5f5;" title="Off White (Canada, Australia)"></div>
+            <div class="color-preset" data-color="#f0f0f0" style="background: #f0f0f0;" title="Light Gray (UK, Germany, EU)"></div>
+            <div class="color-preset" data-color="#e8e8e8" style="background: #e8e8e8;" title="Gray (Schengen Visa)"></div>
+            <div class="color-preset" data-color="#e8f4f8" style="background: #e8f4f8;" title="Light Blue (China, Official Docs)"></div>
+            <div class="color-preset" data-color="#d6eaf8" style="background: #d6eaf8;" title="Sky Blue"></div>
+            <div class="color-preset" data-color="#99ccff" style="background: #99ccff;" title="Blue (China Alternative)"></div>
+            <div class="color-preset" data-color="#87ceeb" style="background: #87ceeb;" title="Light Sky Blue"></div>
+            <div class="color-preset" data-color="#1a73e8" style="background: #1a73e8;" title="Dark Blue (ID Cards)"></div>
+            <div class="color-preset" data-color="#4169e1" style="background: #4169e1;" title="Royal Blue"></div>
+            <div class="color-preset" data-color="#fef5e7" style="background: #fef5e7;" title="Cream (UK Alternative)"></div>
+            <div class="color-preset" data-color="#fff9e6" style="background: #fff9e6;" title="Light Cream"></div>
+            <div class="color-preset" data-color="#faebd7" style="background: #faebd7;" title="Antique White"></div>
+            <div class="color-preset" data-color="#f5f5dc" style="background: #f5f5dc;" title="Beige"></div>
+            <div class="color-preset" data-color="#ffe4e1" style="background: #ffe4e1;" title="Light Pink (Some Asian Countries)"></div>
           </div>
         </div>
       </div>
@@ -592,9 +707,6 @@
 
       <!-- Status Message -->
       <div class="status" id="statusMessage"></div>
-
-      <!-- Preview Container -->
-      <div class="preview-container" id="previewContainer"></div>
     </div>
 
     <!-- Comprehensive Information Section -->
@@ -606,380 +718,23 @@
         <li><strong>Upload Your Photo:</strong> Click the upload button or drag and drop your photo. Use a clear, recent photo taken in the last 6 months with a plain background for best AI background removal results.</li>
         <li><strong>Select Your Country:</strong> Choose your destination country or visa type from the dropdown menu. We support 25+ countries with exact official specifications.</li>
         <li><strong>Choose Background Color:</strong> Select the required background color for your country. Use our preset colors or pick any custom color with the color picker.</li>
+        <li><strong>Adjust Your Photo:</strong> Use the canvas editor to zoom, move, and rotate your image to fit perfectly within the passport photo frame.</li>
         <li><strong>Click "Create Passport Photo":</strong> Our advanced AI will automatically remove the background, apply your chosen color, and resize your photo to exact government specifications.</li>
         <li><strong>Download Your Photo:</strong> Download your professional passport photo in high-quality PNG format, ready for printing or digital submission to embassies and government offices.</li>
       </ol>
-
-      <h3>🌍 Country-Specific Requirements & Specifications</h3>
-      <p>Each country has specific passport photo requirements. Here are the exact specifications for major countries:</p>
-      
-      <div class="country-specs">
-        <div class="country-card">
-          <h4>🇺🇸 United States</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">2x2 inch (51x51mm)</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">600x600px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White or Off-White</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">1-1⅜ inches (50-69%)</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇬🇧 United Kingdom</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">35x45mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">413x531px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">Light Grey or Cream</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">29-34mm (70-80%)</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇮🇳 India</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">35x45mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">413x531px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">25-35mm</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇨🇦 Canada</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">50x70mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">591x827px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White or Light</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">31-36mm</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇪🇺 Schengen Countries</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">35x45mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">413x531px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">Light Grey</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Countries:</span>
-            <span class="spec-value">26 EU Countries</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇦🇺 Australia</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">35x45mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">413x531px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">Light Colored</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">32-36mm</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇨🇳 China</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">33x48mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">390x567px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White or Light Blue</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">28-33mm</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇵🇰 Pakistan</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">35x45mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">413x531px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">25-35mm</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇦🇪 UAE (United Arab Emirates)</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">43x55mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">508x650px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">32-36mm</span>
-          </div>
-        </div>
-
-        <div class="country-card">
-          <h4>🇸🇦 Saudi Arabia</h4>
-          <div class="spec">
-            <span class="spec-label">Size:</span>
-            <span class="spec-value">40x60mm</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Pixels:</span>
-            <span class="spec-value">472x709px</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Background:</span>
-            <span class="spec-value">White</span>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Head Size:</span>
-            <span class="spec-value">70-80% of photo</span>
-          </div>
-        </div>
-      </div>
-
-      <h3>🎨 Background Colors by Country & Region</h3>
-      <p>Different countries require different background colors. Here's a complete guide:</p>
-      
-      <div class="feature-grid">
-        <div class="feature-item">
-          <h4>White (#FFFFFF)</h4>
-          <p><strong>Used by:</strong> USA, India, Pakistan, Bangladesh, Philippines, China, UAE, Saudi Arabia, Qatar, Egypt, most Asian countries</p>
-        </div>
-        <div class="feature-item">
-          <h4>Light Blue (#99CCFF / #E8F4F8)</h4>
-          <p><strong>Used by:</strong> China (alternative), some European countries, travel documents, certain visa applications</p>
-        </div>
-        <div class="feature-item">
-          <h4>Light Grey (#F0F0F0)</h4>
-          <p><strong>Used by:</strong> UK, Germany, France, Spain, Italy, Netherlands, Schengen Visa, most EU countries</p>
-        </div>
-        <div class="feature-item">
-          <h4>Off-White/Cream (#FEF5E7 / #F5F5F5)</h4>
-          <p><strong>Used by:</strong> Canada, Australia, UK (alternative), New Zealand, some Commonwealth countries</p>
-        </div>
-        <div class="feature-item">
-          <h4>Dark Blue (#1A73E8)</h4>
-          <p><strong>Used by:</strong> Some official documents, certain visa types, ID cards</p>
-        </div>
-        <div class="feature-item">
-          <h4>Custom Colors</h4>
-          <p><strong>When needed:</strong> Use our color picker for special requirements, ID cards, or specific embassy requests</p>
-        </div>
-      </div>
-
-      <h3>✨ Key Features of Our Passport Photo Maker</h3>
-      <div class="feature-grid">
-        <div class="feature-item">
-          <h4>🤖 AI Background Removal</h4>
-          <p>Advanced AI technology automatically removes your photo background - no manual editing required. Works perfectly with any background.</p>
-        </div>
-        <div class="feature-item">
-          <h4>🌍 25+ Countries Supported</h4>
-          <p>Exact specifications for USA, UK, India, Canada, Australia, Pakistan, UAE, Saudi Arabia, China, and 15+ more countries.</p>
-        </div>
-        <div class="feature-item">
-          <h4>🎨 All Background Colors</h4>
-          <p>Choose from 7 preset colors (white, blue, grey, cream) or use the color picker for any custom color requirement.</p>
-        </div>
-        <div class="feature-item">
-          <h4>📏 Pixel-Perfect Sizing</h4>
-          <p>Exact dimensions that meet official government standards for every country. No guesswork needed.</p>
-        </div>
-        <div class="feature-item">
-          <h4>⚡ Instant Processing</h4>
-          <p>Get your professional passport photo in seconds. Fast cloud processing with no waiting.</p>
-        </div>
-        <div class="feature-item">
-          <h4>💾 High Quality Download</h4>
-          <p>Download in PNG format with maximum quality, ready for printing at photo shops or digital submission online.</p>
-        </div>
-        <div class="feature-item">
-          <h4>📱 Mobile Friendly</h4>
-          <p>Works perfectly on phones and tablets. Take a selfie and create your passport photo instantly.</p>
-        </div>
-        <div class="feature-item">
-          <h4>🆓 Completely Free</h4>
-          <p>No hidden costs, no watermarks, no sign-up required. Create unlimited passport photos for free.</p>
-        </div>
-      </div>
-
-      <h3>💡 Professional Tips for Perfect Passport Photos</h3>
-      <ul>
-        <li><strong>Use Good Lighting:</strong> Take your photo in well-lit conditions with natural light from the front. Avoid harsh shadows on your face or background.</li>
-        <li><strong>Neutral Expression:</strong> Keep a neutral facial expression with both eyes open and mouth closed. No smiling, frowning, or raised eyebrows.</li>
-        <li><strong>Face the Camera Directly:</strong> Look straight at the camera with your full face visible. Keep your head straight, not tilted.</li>
-        <li><strong>Plain Background Helps:</strong> While our AI removes any background, starting with a plain wall (any color) ensures the best results.</li>
-        <li><strong>Remove Accessories:</strong> Take off glasses (unless medically required for daily wear), hats, headbands, and large jewelry that might cover your face.</li>
-        <li><strong>Wear Appropriate Clothing:</strong> Wear normal street attire. Avoid uniforms, white clothing (blends with background), or low-cut tops.</li>
-        <li><strong>Correct Head Position:</strong> Ensure your head takes up 70-80% of the photo height. Your eyes should be positioned about 2/3 from the bottom.</li>
-        <li><strong>Recent Photo Required:</strong> Use a photo taken within the last 6 months that accurately represents your current appearance.</li>
-        <li><strong>No Filters or Editing:</strong> Upload original, unedited photos. Don't use beauty filters, photo editing, or retouching before upload.</li>
-        <li><strong>High Resolution:</strong> Use a photo with at least 600x600 pixels for best quality. Modern smartphone cameras work perfectly.</li>
-      </ul>
-
-      <h3>❓ Frequently Asked Questions (FAQ)</h3>
-      
-      <div style="margin-top: 20px;">
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Is this passport photo maker really free?</h4>
-          <p>Yes! Our passport photo maker is 100% free to use. There are no hidden costs, no watermarks on photos, and no sign-up required. Upload, create, and download as many passport photos as you need, completely free.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Will my photos be stored on your server?</h4>
-          <p>Your privacy is our priority. Photos are processed temporarily on secure servers and automatically deleted immediately after processing. We do not store, save, or share your photos with anyone.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">What file format will I receive?</h4>
-          <p>You'll receive a high-quality PNG file that's perfect for both professional printing at photo shops and digital submission to embassies or government websites.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Can I use this for visa applications?</h4>
-          <p>Absolutely! Our tool creates photos that meet official passport and visa photo requirements for all major countries. Perfect for passport applications, visa applications, ID cards, and official documents.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">What if my country isn't listed in the dropdown?</h4>
-          <p>Choose the "Custom" option and check your country's embassy website for requirements. Most countries use either 35x45mm or 50x70mm with white or light backgrounds. You can manually select the closest size.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">How accurate is the AI background removal?</h4>
-          <p>Our AI uses advanced technology and is very accurate. For best results, use a photo with good lighting and a simple background. The AI works perfectly with any background - plain walls, rooms, outdoors, etc.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Can I print the passport photo at home?</h4>
-          <p>Yes! Download the PNG file and print it on photo paper using your home printer. Make sure to print at actual size (e.g., 2x2 inches for USA). Or take the file to any photo printing shop.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Does this work on mobile phones?</h4>
-          <p>Yes! The tool works perfectly on all devices - smartphones, tablets, laptops, and desktops. Take a selfie on your phone and create your passport photo instantly.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">What should I wear for the passport photo?</h4>
-          <p>Wear normal everyday clothing. Avoid white or very light colors (they blend with the background), uniforms (except if required), and clothing with busy patterns. Dark or medium-toned clothing works best.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Can I wear glasses in my passport photo?</h4>
-          <p>Most countries do not allow glasses unless medically required for daily wear. Check your specific country's requirements. If allowed, ensure no glare on lenses and frames don't cover your eyes.</p>
-        </div>
-      </div>
-
-      <h3>📱 Browser & Device Compatibility</h3>
-      <p>This passport photo maker works on all modern browsers and devices:</p>
-      <ul>
-        <li><strong>Desktop Browsers:</strong> Chrome 90+, Firefox 88+, Safari 14+, Edge 90+, Opera 76+</li>
-        <li><strong>Mobile Browsers:</strong> iOS Safari 14+, Chrome Mobile, Samsung Internet, Firefox Mobile</li>
-        <li><strong>Operating Systems:</strong> Windows, macOS, Linux, Android, iOS</li>
-        <li><strong>Special Features:</strong> Drag & drop upload, color picker, real-time preview</li>
-      </ul>
-
-      <h3>🔒 Privacy & Security</h3>
-      <p>We take your privacy seriously:</p>
-      <ul>
-        <li>✅ Photos processed securely on encrypted servers</li>
-        <li>✅ Automatic deletion after processing</li>
-        <li>✅ No photo storage or sharing</li>
-        <li>✅ No account or email required</li>
-        <li>✅ SSL encrypted connection (HTTPS)</li>
-        <li>✅ No tracking or data collection</li>
-      </ul>
-
-      <h3>📞 Support & Help</h3>
-      <p>Having issues? Here are common solutions:</p>
-      <ul>
-        <li><strong>Upload Failed:</strong> Check file size (max 10MB) and format (JPG, PNG, WebP only)</li>
-        <li><strong>Background Not Removed:</strong> Use a photo with better lighting and simpler background</li>
-        <li><strong>Download Not Working:</strong> Try a different browser or disable ad blockers</li>
-        <li><strong>Wrong Size:</strong> Select the correct country from the dropdown menu</li>
-        <li><strong>Color Issues:</strong> Use preset colors or check your country's requirements</li>
-      </ul>
     </div>
+    <!-- End of info-section -->
+
   </div>
+  <!-- End of container -->
+  
+  </div>
+  <!-- End of page-wrapper -->
+
+  <!-- Footer - Dynamic from API with style.css styling -->
+  <footer class="bg-dark text-white text-center py-4 mt-auto" id="footer">
+    <p class="mb-0">© 2024 WebAITool.net</p>
+  </footer>
 
   <script>
     // ============================================================================
@@ -1071,9 +826,16 @@
     // File Selection Handler
     // ============================================================================
     imageInput.addEventListener('change', handleFileSelect);
+    
+    // Camera input handler
+    const cameraInput = document.getElementById('cameraInput');
+    if (cameraInput) {
+      cameraInput.addEventListener('change', handleFileSelect);
+    }
 
-    function handleFileSelect() {
-      const file = imageInput.files[0];
+    function handleFileSelect(e) {
+      const input = e.target;
+      const file = input.files[0];
       
       if (!file) {
         processBtn.disabled = true;
@@ -1085,6 +847,7 @@
       if (file.size > 10 * 1024 * 1024) {
         showStatus('File too large. Maximum 10MB allowed.', 'error');
         imageInput.value = '';
+        cameraInput.value = '';
         return;
       }
 
@@ -1108,15 +871,36 @@
         <div class="preview-grid">
           <div class="preview-box">
             <h3>📷 Original Photo</h3>
-            <img src="${originalPreviewUrl}" alt="Original uploaded photo">
+            <img src="${originalPreviewUrl}" alt="Original uploaded photo" id="originalImage">
             <p style="color: var(--text-secondary); margin-top: 10px; font-size: 14px;">
               Your uploaded photo
+            </p>
+          </div>
+          <div class="preview-box">
+            <h3>✂️ Adjust Your Photo</h3>
+            <div class="image-editor">
+              <div class="editor-canvas-container">
+                <canvas id="editorCanvas" class="editor-canvas"></canvas>
+              </div>
+              <div class="editor-controls">
+                <label style="font-weight: 600; font-size: 14px;">🔍 Zoom:</label>
+                <input type="range" id="zoomSlider" class="zoom-slider" min="50" max="200" value="100" step="1">
+                <span id="zoomValue" style="min-width: 50px; text-align: center;">100%</span>
+                <button onclick="rotateImage(-90)" title="Rotate Left">↶ Rotate</button>
+                <button onclick="resetEditor()" title="Reset">↻ Reset</button>
+              </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: 10px; font-size: 14px;">
+              Drag to move • Scroll/Slider to zoom • Click rotate to adjust
             </p>
           </div>
         </div>
       `;
 
-      showStatus('Photo selected! Choose country and color, then click "Create Passport Photo".', 'success');
+      showStatus('Photo selected! Adjust the image using zoom/drag/rotate, then click "Create Passport Photo".', 'success');
+
+      // Initialize image editor
+      setTimeout(initImageEditor, 100);
 
       // Track upload event
       trackGA4Event('photo_uploaded', {
@@ -1179,8 +963,11 @@
         return;
       }
 
+      // Get edited image from canvas
+      const editedBlob = await getEditedImageBlob();
+      
       const formData = new FormData();
-      formData.append('image', selectedFile);
+      formData.append('image', editedBlob, 'edited-photo.png');
       formData.append('bgColor', bgColorPicker.value);
       
       const selectedCountry = countrySelect.value;
@@ -1305,6 +1092,183 @@
     }
 
     // ============================================================================
+    // Image Editor Functionality (FIXED - Canvas stays fixed, image moves inside)
+    // ============================================================================
+    let canvas, ctx, editorImage;
+    let scale = 1, rotation = 0, offsetX = 0, offsetY = 0;
+    let isDragging = false, startX, startY;
+
+    function initImageEditor() {
+      canvas = document.getElementById('editorCanvas');
+      if (!canvas) return;
+      
+      ctx = canvas.getContext('2d');
+      editorImage = new Image();
+      editorImage.src = originalPreviewUrl;
+      
+      editorImage.onload = function() {
+        // Set canvas size to match selected country dimensions
+        const selectedCountry = countrySelect.value;
+        const spec = countrySpecs[selectedCountry];
+        canvas.width = spec.width;
+        canvas.height = spec.height;
+        
+        // Initial draw
+        drawImageOnCanvas();
+        
+        // Add event listeners
+        setupEditorControls();
+      };
+    }
+
+    function drawImageOnCanvas() {
+      if (!ctx || !editorImage) return;
+      
+      // Clear canvas with white background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Save context state
+      ctx.save();
+      
+      // Calculate scaled dimensions
+      const imgWidth = editorImage.width * scale;
+      const imgHeight = editorImage.height * scale;
+      
+      // Move to center + offset (this moves the image, not the canvas)
+      ctx.translate(canvas.width / 2 + offsetX, canvas.height / 2 + offsetY);
+      
+      // Apply rotation at the center point
+      ctx.rotate(rotation * Math.PI / 180);
+      
+      // Draw image centered at the rotation point
+      ctx.drawImage(
+        editorImage,
+        -imgWidth / 2,
+        -imgHeight / 2,
+        imgWidth,
+        imgHeight
+      );
+      
+      // Restore context state
+      ctx.restore();
+      
+      // Draw border around canvas to show boundaries clearly
+      ctx.strokeStyle = '#6c5ce7';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function setupEditorControls() {
+      // Zoom slider
+      const zoomSlider = document.getElementById('zoomSlider');
+      const zoomValue = document.getElementById('zoomValue');
+      
+      if (zoomSlider) {
+        zoomSlider.addEventListener('input', function() {
+          scale = this.value / 100;
+          zoomValue.textContent = this.value + '%';
+          drawImageOnCanvas();
+        });
+      }
+      
+      // Canvas dragging - drag the canvas to move the image
+      const canvasContainer = canvas.parentElement;
+      
+      canvasContainer.addEventListener('mousedown', startDrag);
+      canvasContainer.addEventListener('mousemove', drag);
+      canvasContainer.addEventListener('mouseup', stopDrag);
+      canvasContainer.addEventListener('mouseleave', stopDrag);
+      
+      // Touch support for mobile
+      canvasContainer.addEventListener('touchstart', handleTouchStart);
+      canvasContainer.addEventListener('touchmove', handleTouchMove);
+      canvasContainer.addEventListener('touchend', stopDrag);
+      
+      // Mouse wheel zoom on canvas
+      canvasContainer.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -5 : 5;
+        const newValue = Math.min(200, Math.max(50, parseInt(zoomSlider.value) + delta));
+        zoomSlider.value = newValue;
+        scale = newValue / 100;
+        zoomValue.textContent = newValue + '%';
+        drawImageOnCanvas();
+      });
+    }
+
+    function startDrag(e) {
+      isDragging = true;
+      const rect = canvas.getBoundingClientRect();
+      startX = (e.clientX || e.touches[0].clientX) - rect.left - offsetX;
+      startY = (e.clientY || e.touches[0].clientY) - rect.top - offsetY;
+    }
+
+    function drag(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      
+      offsetX = clientX - rect.left - startX;
+      offsetY = clientY - rect.top - startY;
+      
+      drawImageOnCanvas();
+    }
+
+    function stopDrag() {
+      isDragging = false;
+    }
+
+    function handleTouchStart(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      isDragging = true;
+      startX = touch.clientX - rect.left - offsetX;
+      startY = touch.clientY - rect.top - offsetY;
+    }
+
+    function handleTouchMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      offsetX = touch.clientX - rect.left - startX;
+      offsetY = touch.clientY - rect.top - startY;
+      drawImageOnCanvas();
+    }
+
+    function rotateImage(degrees) {
+      rotation += degrees;
+      drawImageOnCanvas();
+    }
+
+    function resetEditor() {
+      scale = 1;
+      rotation = 0;
+      offsetX = 0;
+      offsetY = 0;
+      const zoomSlider = document.getElementById('zoomSlider');
+      const zoomValue = document.getElementById('zoomValue');
+      if (zoomSlider) {
+        zoomSlider.value = 100;
+        zoomValue.textContent = '100%';
+      }
+      drawImageOnCanvas();
+    }
+
+    function getEditedImageBlob() {
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, 'image/png', 1.0);
+      });
+    }
+
+    // ============================================================================
     // Track Initial Page View
     // ============================================================================
     trackGA4Event('page_view', {
@@ -1312,6 +1276,128 @@
       page_location: window.location.href,
       tool_name: 'Passport Photo Maker'
     });
+
+    // ============================================================================
+    // Dynamic Header & Footer Loading (Same as index.html)
+    // ============================================================================
+    const API = 'api.php';
+
+    async function apiCall(action) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
+      try {
+        const response = await fetch(`${API}?action=${action}&_t=${Date.now()}`, {
+          cache: 'no-store',
+          signal: controller.signal,
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const text = await response.text();
+        return JSON.parse(text);
+      } catch(error) {
+        clearTimeout(timeoutId);
+        console.error('API Error:', error);
+        return null;
+      }
+    }
+
+    // Toggle Mobile Menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const menuList = document.getElementById('menuList');
+    
+    if(hamburgerBtn) {
+      hamburgerBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        menuList.classList.toggle('show');
+        hamburgerBtn.classList.toggle('active');
+      });
+    }
+
+    // Toggle Dropdown (make it global for onclick access)
+    window.toggleDropdown = function(id, event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      const clickedDropdown = document.querySelector(`[data-dropdown="${id}"]`);
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      
+      allDropdowns.forEach(dropdown => {
+        if(dropdown !== clickedDropdown) {
+          dropdown.classList.remove('active');
+        }
+      });
+      
+      clickedDropdown?.classList.toggle('active');
+    }
+
+    // Load Dynamic Navigation and Footer
+    async function loadDynamicContent() {
+      try {
+        const [parents, subs, settings] = await Promise.all([
+          apiCall('get_parent_menus'),
+          apiCall('get_sub_menus'),
+          apiCall('get_settings')
+        ]);
+
+        // Build Navigation
+        if(parents && parents.length > 0) {
+          let menuHTML = '<ul class="navbar-nav">';
+          
+          parents.forEach(parent => {
+            const children = subs ? subs.filter(s => s.parent_id == parent.id) : [];
+            
+            if (children.length > 0) {
+              menuHTML += `
+                <li class="nav-item dropdown" data-dropdown="${parent.id}">
+                  <a class="nav-link dropdown-toggle dropbtn" href="#" onclick="toggleDropdown(${parent.id}, event)">${parent.name}</a>
+                  <ul class="dropdown-menu dropdown-content">
+                    ${children.map(child => `<li><a class="dropdown-item" href="${child.link}">${child.name}</a></li>`).join('')}
+                  </ul>
+                </li>
+              `;
+            } else {
+              menuHTML += `<li class="nav-item"><a class="nav-link" href="${parent.link}">${parent.name}</a></li>`;
+            }
+          });
+          
+          menuHTML += '</ul>';
+          document.getElementById('menuList').innerHTML = menuHTML;
+        }
+
+        // Set Footer
+        if(settings && settings.footer_text) {
+          document.getElementById('footer').innerHTML = `<p class="mb-0">${settings.footer_text}</p>`;
+        }
+
+      } catch(error) {
+        console.error('Load Error:', error);
+      }
+    }
+
+    // Load dynamic content when page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadDynamicContent);
+    } else {
+      loadDynamicContent();
+    }
+
+    // Add minimal required styles for dropdown functionality
+    const style = document.createElement('style');
+    style.textContent = `
+      .dropdown-menu { display: none !important; }
+      .dropdown.active .dropdown-menu { display: block !important; }
+    `;
+    document.head.appendChild(style);
   </script>
+
+  <!-- Bootstrap JS (Required for navbar functionality) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
